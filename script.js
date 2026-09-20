@@ -1044,9 +1044,7 @@ function endGame() {
     gameScreen.classList.add("hidden");
     resultScreen.classList.remove("hidden");
 
-   const percentage = (score / 20) * 100;
-
-    finalScore.textContent = `${score} / 20 — ${percentage}%`;
+    finalScore.textContent = `${score} / 20 — ${score * 5}%`;
 
     let title;
     let comment;
