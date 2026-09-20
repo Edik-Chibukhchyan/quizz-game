@@ -15,6 +15,7 @@ const resultScreen = document.getElementById("result-screen");
 const finalScore = document.getElementById("final-score");
 const finalTitle = document.getElementById("final-title");
 const finalComment = document.getElementById("final-comment");
+const finalPercentage = document.getElementById("final-percentage");
 
 const restartButton = document.getElementById("restart-button");
 
@@ -1044,7 +1045,26 @@ function endGame() {
     gameScreen.classList.add("hidden");
     resultScreen.classList.remove("hidden");
 
-    finalScore.textContent = `${score} / 20 — ${score * 5}%`;
+    const percentage = score * 5;
+
+    finalPercentage.textContent = `${percentage}%`;
+    finalScore.textContent = `${score} / 20`;
+
+    if (percentage <= 20) {
+        finalPercentage.style.color = "red";
+    }
+    else if (percentage <= 40) {
+        finalPercentage.style.color = "orange";
+    }
+    else if (percentage <= 60) {
+        finalPercentage.style.color = "yellow";
+    }
+    else if (percentage <= 80) {
+        finalPercentage.style.color = "lightgreen";
+    }
+    else {
+        finalPercentage.style.color = "lime";
+    }
 
     let title;
     let comment;
