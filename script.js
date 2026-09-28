@@ -19,6 +19,12 @@ const finalPercentage = document.getElementById("final-percentage");
 
 const restartButton = document.getElementById("restart-button");
 
+const scoreCounter = document.getElementById("score-counter");
+
+const progressBar = document.getElementById("progress-bar");
+
+const comboCounter = document.getElementById("combo-counter");
+
 
 // ==========================
 // 20 harc
@@ -888,6 +894,7 @@ let timer;
 let fiftyUsed = false;
 let changeUsed = false;
 let hintUsed = false;
+let combo = 0;
 
 
 // ==========================
@@ -899,11 +906,21 @@ startButton.addEventListener("click", startGame);
 
 function startGame() {
 
+    resultScreen.classList.remove(
+    "result-low",
+    "result-medium",
+    "result-good",
+    "result-great",
+    "result-perfect"
+);
+
     startScreen.classList.add("hidden");
     gameScreen.classList.remove("hidden");
 
     currentQuestion = 0;
     score = 0;
+    combo = 0;
+    scoreCounter.textContent = "✓ 0";
 
     fiftyUsed = false;
     changeUsed = false;
@@ -939,6 +956,9 @@ function showQuestion() {
 
     questionNumber.textContent =
         `Հարց ${currentQuestion + 1} / 20`;
+        
+    progressBar.style.width =
+    `${((currentQuestion + 1) / 20) * 100}%`;
 
     questionText.textContent = current.question;
 
@@ -954,6 +974,9 @@ function showQuestion() {
     button.onclick = () => checkAnswer(index);
 
     });
+
+    void gameScreen.offsetWidth;
+gameScreen.classList.add("question-enter");
 }
 
 function startTimer() {
@@ -991,10 +1014,20 @@ function updateTimer() {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
 
-    document.getElementById("timer").textContent =
-        `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-}
+    const timerElement = document.getElementById("timer");
 
+    timerElement.textContent =
+        `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+    timerElement.classList.remove("timer-warning", "timer-danger");
+
+    if (timeLeft <= 5) {
+        timerElement.classList.add("timer-danger");
+    }
+    else if (timeLeft <= 20) {
+        timerElement.classList.add("timer-warning");
+    }
+}
 function checkAnswer(selectedAnswer) {
 
     clearInterval(timer);
@@ -1005,19 +1038,36 @@ function checkAnswer(selectedAnswer) {
         button.disabled = true;
     });
 
-    if (selectedAnswer === current.correct) {
+  if (selectedAnswer === current.correct) {
 
-        score++;
+    score++;
+    combo++;
 
-        answerButtons[selectedAnswer].classList.add("correct");
+    if (combo >= 2) {
+    comboCounter.textContent = `🔥 ${combo} COMBO!`;
+    comboCounter.classList.add("combo-active");
+}
 
-    } else {
+    answerButtons[selectedAnswer].classList.add("correct");
 
-        answerButtons[selectedAnswer].classList.add("wrong");
-        answerButtons[current.correct].classList.add("correct");
+    scoreCounter.textContent = `✓ ${score}`;
 
-    }
+    showScoreEffect();
 
+}
+
+else {
+
+    combo = 0;
+
+    comboCounter.textContent = "";
+    comboCounter.classList.remove("combo-active");
+
+    answerButtons[selectedAnswer].classList.add("wrong");
+    answerButtons[current.correct].classList.add("correct");
+
+    showWrongEffect();
+}
     setTimeout(() => {
 
         answerButtons.forEach(button => {
@@ -1036,6 +1086,19 @@ function checkAnswer(selectedAnswer) {
     }, 1000);
 }
 
+function showWrongEffect() {
+
+    const effect = document.createElement("div");
+
+    effect.className = "wrong-effect";
+
+    document.body.appendChild(effect);
+
+    setTimeout(() => {
+        effect.remove();
+    }, 450);
+}
+
 function endGame() {
 
     clearInterval(timer);
@@ -1044,10 +1107,18 @@ function endGame() {
 
     gameScreen.classList.add("hidden");
     resultScreen.classList.remove("hidden");
+    resultScreen.classList.remove("result-animate");
+
+void resultScreen.offsetWidth;
+
+resultScreen.classList.add("result-animate");
 
     const percentage = score * 5;
+    if (percentage === 100) {
+    showConfetti();
+}
 
-    finalPercentage.textContent = `${percentage}%`;
+    animatePercentage(percentage);
     finalScore.textContent = `${score} / 20`;
 
     if (percentage <= 20) {
@@ -1064,6 +1135,22 @@ function endGame() {
     }
     else {
         finalPercentage.style.color = "lime";
+    }
+
+    if (percentage <= 20) {
+    resultScreen.classList.add("result-low");
+    }
+    else if (percentage <= 40) {
+        resultScreen.classList.add("result-medium");
+    }
+    else if (percentage <= 60) {
+        resultScreen.classList.add("result-good");
+    }
+    else if (percentage <= 80) {
+        resultScreen.classList.add("result-great");
+    }
+    else {
+        resultScreen.classList.add("result-perfect");
     }
 
     let title;
@@ -1098,6 +1185,59 @@ function endGame() {
 
 }
 
+function showConfetti() {
+
+    for (let i = 0; i < 60; i++) {
+
+        const confetti = document.createElement("div");
+
+        confetti.className = "confetti";
+
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.animationDelay =
+            Math.random() * 0.8 + "s";
+
+        confetti.style.setProperty(
+            "--fall-distance",
+            80 + Math.random() * 100 + "vh"
+        );
+
+        document.body.appendChild(confetti);
+
+        setTimeout(() => {
+            confetti.remove();
+        }, 2500);
+    }
+}
+
+function animatePercentage(target) {
+
+    let current = 0;
+
+    finalPercentage.textContent = "0%";
+
+    const duration = 1000;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+
+        const progress = Math.min(
+            (currentTime - startTime) / duration,
+            1
+        );
+
+        current = Math.floor(progress * target);
+
+        finalPercentage.textContent = `${current}%`;
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+
+    requestAnimationFrame(update);
+}
+
 fiftyButton.addEventListener("click", useFiftyFifty);
 
 
@@ -1129,6 +1269,7 @@ function useFiftyFifty() {
         answerButtons[index].style.visibility = "hidden";
     });
 
+    fiftyButton.classList.add("bonus-used");
     fiftyButton.disabled = true;
 }
 
@@ -1159,6 +1300,7 @@ function changeQuestion() {
 
     gameQuestions[currentQuestion] = availableQuestions[randomIndex];
 
+    changeButton.classList.add("bonus-used");
     changeButton.disabled = true;
 
     showQuestion();
@@ -1182,6 +1324,7 @@ function useHint() {
     hintText.textContent = "💡 " + current.hint;
     hintText.classList.remove("hidden");
 
+    hintButton.classList.add("bonus-used");
     hintButton.disabled = true;
 }
 
@@ -1201,4 +1344,44 @@ function restartGame() {
 
     startGame();
 
+}
+function showScoreEffect() {
+
+    // +1
+    const effect = document.createElement("div");
+
+    effect.textContent = "+1";
+    effect.className = "score-effect";
+
+    document.body.appendChild(effect);
+
+
+    // Մասնիկներ
+    const particleEffect = document.createElement("div");
+    particleEffect.className = "particle-effect";
+
+    for (let i = 0; i < 12; i++) {
+
+        const particle = document.createElement("span");
+
+        particle.textContent = "✦";
+        particle.className = "particle";
+
+        const angle = (360 / 12) * i;
+        const distance = 80 + Math.random() * 60;
+
+        particle.style.setProperty("--angle", `${angle}deg`);
+        particle.style.setProperty("--distance", `${distance}px`);
+
+        particleEffect.appendChild(particle);
+    }
+
+    document.body.appendChild(particleEffect);
+
+
+    // Հեռացնում ենք երկուսն էլ
+    setTimeout(() => {
+        effect.remove();
+        particleEffect.remove();
+    }, 900);
 }

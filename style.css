@@ -53,7 +53,23 @@ h1 {
 .screen {
     width: 90%;
     max-width: 700px;
+
     text-align: center;
+
+    padding: 40px;
+
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    border-radius: 24px;
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.35);
+
+    animation: fadeIn 0.6s ease;
 }
 
 .game-header {
@@ -103,14 +119,27 @@ h1 {
     font-size: 15px;
 }
 
+.answer-button {
+    transition:
+        background-color 0.35s ease,
+        color 0.35s ease,
+        transform 0.25s ease,
+        box-shadow 0.35s ease,
+        opacity 0.35s ease;
+}
+
 .answer-button.correct {
-    background-color: green;
+    background-color: #20b26b;
     color: white;
+    box-shadow: 0 0 25px rgba(32, 178, 107, 0.55);
+    animation: correctAnswer 0.45s ease;
 }
 
 .answer-button.wrong {
-    background-color: red;
+    background-color: #e5484d;
     color: white;
+    box-shadow: 0 0 25px rgba(229, 72, 77, 0.5);
+    animation: wrongAnswer 0.45s ease;
 }
 
 #restart-button {
@@ -127,4 +156,678 @@ h1 {
     font-size: 64px;
     font-weight: bold;
     margin-bottom: 10px;
+    transform-origin: center;
+
+    text-shadow:
+        0 0 10px currentColor,
+        0 0 25px currentColor,
+        0 0 45px rgba(255, 255, 255, 0.25);
+}
+@media (max-width: 600px) {
+
+    .progress-container {
+    height: 6px;
+    margin-bottom: 20px;
+}
+
+    .screen {
+    width: 92%;
+    max-width: none;
+    padding: 25px 18px;
+}
+
+    h1 {
+        font-size: 34px;
+        margin-bottom: 15px;
+    }
+
+    .description {
+        font-size: 17px;
+        line-height: 1.4;
+        margin-bottom: 25px;
+    }
+
+    #start-button {
+        padding: 13px 30px;
+        font-size: 18px;
+    }
+
+    .game-header {
+        margin-bottom: 25px;
+        font-size: 16px;
+    }
+
+    #timer {
+        font-size: 20px;
+    }
+
+    #question {
+        font-size: 23px;
+        line-height: 1.3;
+        margin-bottom: 22px;
+    }
+
+    #answers {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .answer-button {
+        padding: 13px 10px;
+        font-size: 16px;
+    }
+
+    .bonuses {
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    .bonuses button {
+        width: 100%;
+        padding: 12px;
+        font-size: 15px;
+    }
+
+    #hint-text {
+        font-size: 15px;
+        margin-top: 15px;
+        line-height: 1.4;
+    }
+
+    #final-percentage {
+        font-size: 52px;
+    }
+
+    #final-score {
+        font-size: 20px;
+    }
+
+#final-title {
+    font-size: 25px;
+    margin-top: 15px;
+
+    animation: titleReveal 0.8s ease 0.7s both;
+    transform-origin: center;
+}
+
+    #final-comment {
+        font-size: 16px;
+        line-height: 1.4;
+        margin-top: 10px;
+    }
+
+    #restart-button {
+        padding: 16px 35px;
+        font-size: 18px;
+        margin-top: 25px;
+    }
+}
+
+/* ===== ԴԻԶԱՅՆ ===== */
+
+body {
+    transition: background 0.3s ease;
+}
+
+/* Բոլոր էկրանների համար */
+.screen {
+    animation: fadeIn 0.6s ease;
+}
+
+/* Վերնագրեր */
+h1,
+h2 {
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Սկզբի կոճակ */
+#start-button {
+    background: white;
+    color: #111;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+}
+
+#start-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+#start-button:active {
+    transform: translateY(1px);
+}
+
+/* Պատասխանների կոճակներ */
+.answer-button {
+    background: rgba(255, 255, 255, 0.95);
+    color: #111;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.answer-button:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.answer-button:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+/* Բոնուսներ */
+.bonuses button {
+    background: rgba(255, 255, 255, 0.9);
+    color: #111;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.bonuses button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.bonuses button:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+/* Անջատված բոնուս */
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Հուշում */
+#hint-text {
+    animation: hintAppear 0.3s ease;
+}
+
+/* Վերջնական տոկոս */
+#final-percentage {
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Կրկին խաղալ */
+#restart-button {
+    background: white;
+    color: #111;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#restart-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+#restart-button:active {
+    transform: translateY(1px);
+}
+
+
+/* ===== ԱՆԻՄԱՑԻԱՆԵՐ ===== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes hintAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes correctAnswer {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.04);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes wrongAnswer {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.question-enter {
+    animation: questionEnter 0.5s ease;
+}
+
+@keyframes questionEnter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+#score-counter {
+    font-weight: bold;
+    transition: transform 0.25s ease;
+}
+
+.score-effect {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+
+    font-size: 56px;
+    font-weight: 900;
+    color: #20b26b;
+
+    text-shadow:
+        0 0 8px #20b26b,
+        0 0 20px #20b26b,
+        0 0 35px rgba(32, 178, 107, 0.8);
+
+    pointer-events: none;
+    z-index: 9999;
+
+    animation: scoreFly 0.9s ease-out forwards;
+}
+
+@keyframes scoreFly {
+
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -30%) scale(0.7);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.25);
+    }
+
+    70% {
+        opacity: 1;
+        transform: translate(-50%, -90%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -150%) scale(1);
+    }
+}
+
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #20b26b;
+    border-radius: 10px;
+
+    transition: width 0.5s ease;
+    box-shadow: 0 0 12px rgba(32, 178, 107, 0.6);
+}
+
+#combo-counter {
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#combo-counter.combo-active {
+    opacity: 1;
+    animation: comboPop 0.4s ease;
+}
+
+@keyframes comboPop {
+    0% {
+        transform: scale(0.7);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+#timer {
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+#timer.timer-warning {
+    color: orange;
+}
+
+#timer.timer-danger {
+    color: red;
+    animation: timerPulse 0.7s ease-in-out infinite;
+}
+
+@keyframes timerPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.particle-effect {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+.particle {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    font-size: 26px;
+    font-weight: bold;
+    color: #20b26b;
+
+    text-shadow:
+        0 0 8px #20b26b,
+        0 0 18px #20b26b;
+
+    animation: particleBurst 0.8s ease-out forwards;
+}
+
+@keyframes particleBurst {
+
+    0% {
+        opacity: 1;
+        transform:
+            rotate(var(--angle))
+            translateX(10px)
+            scale(0.5);
+    }
+
+    25% {
+        opacity: 1;
+        transform:
+            rotate(var(--angle))
+            translateX(35px)
+            scale(1.2);
+    }
+
+    70% {
+        opacity: 1;
+        transform:
+            rotate(var(--angle))
+            translateX(var(--distance))
+            scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            rotate(var(--angle))
+            translateX(calc(var(--distance) + 20px))
+            scale(0.7);
+    }
+}
+
+.wrong-effect {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(229, 72, 77, 0.18);
+
+    pointer-events: none;
+    z-index: 9998;
+
+    animation: wrongFlash 0.45s ease-out;
+}
+
+@keyframes wrongFlash {
+
+    0% {
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.result-animate {
+    animation: resultAppear 0.7s ease forwards;
+}
+
+#final-percentage {
+    animation: percentageAppear 0.8s ease 0.2s both;
+}
+
+#final-score {
+    animation: resultItemAppear 0.6s ease 0.5s both;
+}
+
+#final-title {
+    animation: titleReveal 0.8s ease 0.7s both;
+    transform-origin: center;
+
+    text-shadow:
+        0 0 8px currentColor,
+        0 0 20px rgba(255, 255, 255, 0.35);
+}
+
+#final-comment {
+    animation: resultItemAppear 0.6s ease 0.9s both;
+}
+
+#restart-button {
+    animation: resultItemAppear 0.6s ease 1.1s both;
+}
+
+@keyframes resultAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes percentageAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.4);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes resultItemAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bonus-used {
+    animation: bonusUsed 0.5s ease;
+}
+
+@keyframes bonusUsed {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.15) rotate(-2deg);
+    }
+
+    70% {
+        transform: scale(0.95) rotate(2deg);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.result-low {
+    box-shadow: 0 20px 50px rgba(229, 72, 77, 0.25);
+}
+
+.result-medium {
+    box-shadow: 0 20px 50px rgba(255, 165, 0, 0.25);
+}
+
+.result-good {
+    box-shadow: 0 20px 50px rgba(255, 220, 80, 0.3);
+}
+
+.result-great {
+    box-shadow: 0 20px 50px rgba(80, 220, 130, 0.35);
+}
+
+.result-perfect {
+    box-shadow:
+        0 20px 60px rgba(32, 178, 107, 0.45),
+        0 0 40px rgba(32, 178, 107, 0.2);
+}
+
+@keyframes titleReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(15px);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.12) translateY(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.confetti {
+    position: fixed;
+
+    top: -20px;
+
+    width: 10px;
+    height: 18px;
+
+    background: white;
+
+    pointer-events: none;
+    z-index: 10001;
+
+    animation: confettiFall 2.5s linear forwards;
+}
+
+@keyframes confettiFall {
+
+    0% {
+        transform:
+            translateY(0)
+            rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translateY(var(--fall-distance))
+            rotate(720deg);
+        opacity: 0;
+    }
 }
